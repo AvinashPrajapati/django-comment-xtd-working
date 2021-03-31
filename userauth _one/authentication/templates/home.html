@@ -1,0 +1,48 @@
+<head>
+    <title>Detail</title>
+    
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/17dac75316.js" crossorigin="anonymous"></script>
+</head>
+ 
+<div class="col-8 offset-2">
+
+{% if request.user.is_authenticated %}hello {{request.user.username}}
+<br>
+<a href="{% url 'account_change_password' %}">update your password</a><br>
+<a href="{% url 'authentication:userProfile' %}">Userprofile</a><br>
+<a href="{% url 'account_logout' %}">logout</a>
+<br>
+<br>
+    {% for postlist in postList %}
+        <a href="{% url 'authentication:postDetail' slug=postlist.slug %}">{{postlist.title}}</a><br>
+        <p>{{postlist.content}}</p>
+    {% endfor %}
+<br>
+{% else %}
+<a href="{% url 'authentication:userProfile' %}">Userprofile</a><br>
+<a href="{% url 'account_login' %}">login</a><br>
+<a href="{% url 'account_signup' %}">signup</a>
+{% endif %}
+
+<div class="col-8">
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="post" action="{% url 'authentication:newsletter_register' %}">
+    {% csrf_token %}
+        <input type="email" name="email" id="email" required>
+        <button type="submit">Suscribe</button>
+    </form>
+</div>
+
+</div>
